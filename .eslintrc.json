@@ -1,0 +1,10 @@
+{
+  "extends": ["next", "prettier"],
+  "plugins": ["react", "prettier"],
+  "rules": {
+    "react/react-in-jsx-scope": "off",
+    "react/prop-types": "off",
+    "prettier/prettier": "warn",
+    "react/no-unescaped-entities": 0
+  }
+}

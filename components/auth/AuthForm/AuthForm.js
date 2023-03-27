@@ -1,49 +1,49 @@
-import {useState} from 'react';
-import  {signIn} from "next-auth/react";
+import { useState } from 'react';
+import { signIn } from 'next-auth/react';
 import classes from './AuthForm.module.css';
-import {useRouter} from "next/router";
+import { useRouter } from 'next/router';
 
 const AuthForm = () => {
-    const [isLogin, setIsLogin] = useState(false)
-    const [email, setEmail] = useState("")
-    const [password, setPassword] = useState("");
-    const {replace} = useRouter()
+    const [isLogin, setIsLogin] = useState(false);
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const { replace } = useRouter();
 
     const switchAuthModeHandler = () => {
-        setIsLogin((prevState) => !prevState)
-    }
+        setIsLogin((prevState) => !prevState);
+    };
 
     const submitHandler = async (event) => {
         event.preventDefault();
         if (isLogin) {
-         const result =  await signIn("credentials", {
-             redirect: false,
-             email,
-             password
-         });
-         if(!result.error) {
-             replace('/profile')
-         }
+            const result = await signIn('credentials', {
+                redirect: false,
+                email,
+                password,
+            });
+            if (!result.error) {
+                replace('/profile');
+            }
         } else {
             try {
                 const response = await fetch('/api/auth/signup', {
                     method: 'POST',
                     body: JSON.stringify({ email, password }),
                     headers: {
-                        'Content-Type': 'application/json'
-                    }
-                })
+                        'Content-Type': 'application/json',
+                    },
+                });
 
                 const data = await response.json();
 
                 if (!data.ok) {
-                    throw new Error(data.message || "Something went wrong")
+                    throw new Error(data.message || 'Something went wrong');
                 }
             } catch (e) {
-                console.log(e)
+                console.log(e);
             }
         }
-    }
+    };
 
     return (
         <section className={classes.auth}>
@@ -51,12 +51,23 @@ const AuthForm = () => {
             <form onSubmit={submitHandler}>
                 <div className={classes.control}>
                     <label htmlFor="email">Your Email</label>
-                    <input type="email" id="email" required value={email} onChange={e => setEmail(e.target.value)}/>
+                    <input
+                        type="email"
+                        id="email"
+                        required
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                    />
                 </div>
                 <div className={classes.control}>
                     <label htmlFor="password">Your Password</label>
-                    <input type="password" id="password" required value={password}
-                           onChange={e => setPassword(e.target.value)}/>
+                    <input
+                        type="password"
+                        id="password"
+                        required
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                    />
                 </div>
                 <div className={classes.actions}>
                     <button>{isLogin ? 'Login' : 'Create Account'}</button>
@@ -72,7 +83,7 @@ const AuthForm = () => {
                 </div>
             </form>
         </section>
-    )
-}
+    );
+};
 
-export default AuthForm
+export default AuthForm;

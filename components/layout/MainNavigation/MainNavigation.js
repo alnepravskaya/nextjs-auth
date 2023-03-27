@@ -1,15 +1,15 @@
-import Link from 'next/link'
+import Link from 'next/link';
 
-import {signOut, useSession} from "next-auth/react";
-import classes from './MainNavigation.module.css'
+import { signOut, useSession } from 'next-auth/react';
+import classes from './MainNavigation.module.css';
 
 const MainNavigation = () => {
-    const {status} = useSession();
+    const { status } = useSession();
     const isAuthed = status === 'authenticated';
 
-    const logoutHandler =async ()=> {
-       await signOut();
-    }
+    const logoutHandler = async () => {
+        await signOut();
+    };
 
     return (
         <header className={classes.header}>
@@ -18,19 +18,25 @@ const MainNavigation = () => {
             </Link>
             <nav>
                 <ul>
-                    {!isAuthed &&<li>
-                        <Link href="/auth">Login</Link>
-                    </li>}
-                    {isAuthed && <li>
-                        <Link href="/profile">Profile</Link>
-                    </li>}
-                    { isAuthed && <li onClick={logoutHandler}>
-                        <button>Logout</button>
-                    </li>}
+                    {!isAuthed && (
+                        <li>
+                            <Link href="/auth">Login</Link>
+                        </li>
+                    )}
+                    {isAuthed && (
+                        <li>
+                            <Link href="/profile">Profile</Link>
+                        </li>
+                    )}
+                    {isAuthed && (
+                        <li onClick={logoutHandler}>
+                            <button>Logout</button>
+                        </li>
+                    )}
                 </ul>
             </nav>
         </header>
-    )
-}
+    );
+};
 
-export default MainNavigation
+export default MainNavigation;

@@ -8,51 +8,55 @@ const handler = async (req, res) => {
         return;
     }
 
-    const session = await getSession({ req: req });
+    try {
+        const session = await getSession({ req: req });
 
-    if (!session) {
-        res.status(401).json({ message: 'Not authenticated!' });
-        return;
-    }
+        if (!session) {
+            res.status(401).json({ message: 'Not authenticated!' });
+            return;
+        }
 
-    const userEmail = session.user.email;
-    const oldPassword = req.body.oldPassword;
-    const newPassword = req.body.newPassword;
+        const userEmail = session.user.email;
+        const oldPassword = req.body.oldPassword;
+        const newPassword = req.body.newPassword;
 
-    const client = await connectDB();
+        const client = await connectDB();
 
-    const usersCollection = client.db().collection('users');
+        const usersCollection = client.db().collection('users');
 
-    const user = await usersCollection.findOne({ email: userEmail });
+        const user = await usersCollection.findOne({ email: userEmail });
 
-    if (!user) {
-        res.status(404).json({ message: 'User not found.' });
+        if (!user) {
+            res.status(404).json({ message: 'User not found.' });
+            client.close();
+            return;
+        }
+
+        const currentPassword = user.password;
+
+        const passwordsAreEqual = await verifyPassword(
+            oldPassword,
+            currentPassword
+        );
+
+        if (!passwordsAreEqual) {
+            res.status(403).json({ message: 'Invalid password.' });
+            client.close();
+            return;
+        }
+
+        const hashedPassword = await hashPassword(newPassword);
+
+        const result = await usersCollection.updateOne(
+            { email: userEmail },
+            { $set: { password: hashedPassword } }
+        );
+
         client.close();
-        return;
+        res.status(200).json({ message: 'Password updated!' });
+    } catch (e) {
+        res.status(500).json({ message: e.message });
     }
-
-    const currentPassword = user.password;
-
-    const passwordsAreEqual = await verifyPassword(
-        oldPassword,
-        currentPassword
-    );
-
-    if (!passwordsAreEqual) {
-        res.status(403).json({ message: 'Invalid password.' });
-        client.close();
-        return;
-    }
-
-    const hashedPassword = await hashPassword(newPassword);
-
-    const result = await usersCollection.updateOne(
-        { email: userEmail },
-        { $set: { password: hashedPassword } }
-    );
-
-    client.close();
-    res.status(200).json({ message: 'Password updated!' });
 };
 
 export default handler;

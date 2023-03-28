@@ -1,29 +1,44 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
 import { signIn } from 'next-auth/react';
 import classes from './AuthForm.module.css';
-import { useRouter } from 'next/router';
 
 const AuthForm = () => {
     const [isLogin, setIsLogin] = useState(false);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const { replace } = useRouter();
+    const [message, setMessage] = useState('');
+    const { push } = useRouter();
 
     const switchAuthModeHandler = () => {
         setIsLogin((prevState) => !prevState);
     };
 
+    useEffect(() => {
+        if (message) {
+            const timer = setTimeout(() => {
+                setMessage('');
+            }, 5000);
+
+            return () => clearTimeout(timer);
+        }
+    }, [message]);
+
     const submitHandler = async (event) => {
         event.preventDefault();
+        setMessage('');
+
         if (isLogin) {
             const result = await signIn('credentials', {
                 redirect: false,
                 email,
                 password,
             });
+            debugger;
             if (!result.error) {
-                replace('/profile');
+                push('/profile');
             }
+            setMessage(result.error);
         } else {
             try {
                 const response = await fetch('/api/auth/signup', {
@@ -35,12 +50,15 @@ const AuthForm = () => {
                 });
 
                 const data = await response.json();
-
                 if (!data.ok) {
                     throw new Error(data.message || 'Something went wrong');
                 }
+                switchAuthModeHandler();
+                setMessage(
+                    `${data.message}. Enter your password and email to login`
+                );
             } catch (e) {
-                console.log(e);
+                setMessage(e.message);
             }
         }
     };
@@ -59,6 +77,7 @@ const AuthForm = () => {
                         onChange={(e) => setEmail(e.target.value)}
                     />
                 </div>
+
                 <div className={classes.control}>
                     <label htmlFor="password">Your Password</label>
                     <input
@@ -69,6 +88,7 @@ const AuthForm = () => {
                         onChange={(e) => setPassword(e.target.value)}
                     />
                 </div>
+                {message && <p className={classes.text}>{message}</p>}
                 <div className={classes.actions}>
                     <button>{isLogin ? 'Login' : 'Create Account'}</button>
                     <button

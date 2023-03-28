@@ -6,6 +6,7 @@ import { useRouter } from 'next/router';
 const AuthPage = () => {
     const [isLoading, setIsLoading] = useState(true);
     const { replace } = useRouter();
+
     useEffect(() => {
         getSession().then((session) => {
             if (session) {

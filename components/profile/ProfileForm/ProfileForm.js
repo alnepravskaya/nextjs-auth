@@ -1,13 +1,29 @@
 import classes from './ProfileForm.module.css';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 const ProfileForm = (props) => {
+    const [message, setMessage] = useState('');
     const [oldPassword, setOldPassword] = useState('');
     const [newPassword, setNewPassword] = useState('');
 
-    const submitHandler = (event) => {
+    useEffect(() => {
+        if (message) {
+            const timer = setTimeout(() => {
+                setMessage('');
+                setOldPassword('');
+                setNewPassword('');
+            }, 5000);
+
+            return () => clearTimeout(timer);
+        }
+    }, [message]);
+
+    const submitHandler = async (event) => {
         event.preventDefault();
-        props.onChangePassword({ oldPassword, newPassword });
+
+        const data = await props.onChangePassword({ oldPassword, newPassword });
+
+        setMessage(data.message);
     };
 
     return (
@@ -30,6 +46,7 @@ const ProfileForm = (props) => {
                     onChange={(e) => setNewPassword(e.target.value)}
                 />
             </div>
+            <p className={classes.text}>{message}</p>
             <div className={classes.action}>
                 <button>Change Password</button>
             </div>

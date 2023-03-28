@@ -13,7 +13,7 @@ const UserProfile = () => {
 
         const data = await result.json();
 
-        console.log(data);
+        return data;
     };
 
     return (

@@ -34,7 +34,7 @@ const AuthForm = () => {
                 email,
                 password,
             });
-            debugger;
+
             if (!result.error) {
                 push('/profile');
             }

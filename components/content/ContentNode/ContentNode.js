@@ -1,10 +1,11 @@
 const ContentNode = (props) => {
+    debugger;
     switch (props.nodeType) {
         case 'document':
             return (
                 <div>
                     {props.content.map((item, index) => (
-                        <ContentNode key={index} {...item} />
+                        <ContentNode key={index.toString()} {...item} />
                     ))}
                 </div>
             );
@@ -13,6 +14,12 @@ const ContentNode = (props) => {
                 <h2>
                     <ContentNode {...props.content[0]} />
                 </h2>
+            );
+        case 'heading-3':
+            return (
+                <h3>
+                    <ContentNode {...props.content[0]} />
+                </h3>
             );
         case 'unordered-list':
             return (

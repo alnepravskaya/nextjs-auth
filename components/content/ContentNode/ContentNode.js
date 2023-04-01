@@ -1,5 +1,4 @@
 const ContentNode = (props) => {
-    debugger;
     switch (props.nodeType) {
         case 'document':
             return (
@@ -21,6 +20,24 @@ const ContentNode = (props) => {
                     <ContentNode {...props.content[0]} />
                 </h3>
             );
+        case 'heading-4':
+            return (
+                <h4>
+                    <ContentNode {...props.content[0]} />
+                </h4>
+            );
+        case 'heading-5':
+            return (
+                <h4>
+                    <ContentNode {...props.content[0]} />
+                </h4>
+            );
+        case 'heading-6':
+            return (
+                <h4>
+                    <ContentNode {...props.content[0]} />
+                </h4>
+            );
         case 'unordered-list':
             return (
                 <ul className="content-node-list">
@@ -28,6 +45,14 @@ const ContentNode = (props) => {
                         <ContentNode key={index.toString()} {...item} />
                     ))}
                 </ul>
+            );
+        case 'ordered-list':
+            return (
+                <ol className="content-node-list">
+                    {props.content.map((item, index) => (
+                        <ContentNode key={index.toString()} {...item} />
+                    ))}
+                </ol>
             );
         case 'list-item': {
             return (

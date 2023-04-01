@@ -1,24 +1,10 @@
 import { client } from '../../lib/utils';
 
 import { NEXTJS_PAGE } from '../../graphQL/nextJsPage';
+import ContentNode from '../../components/content/ContentNode/ContentNode';
+import NextJsQuestions from '../../components/questions/NextJsQuestions/NextJsQuestions';
 
-const NextJsPage = (props) => {
-    console.log(props);
-    return (
-        <>
-            {props.data.map((content, i) => (
-                <div key={content.sys.id}>
-                    {/*
-            <ContentNode key={content.sys.id + "answer"} {...content.answer.json.content}/>
-*/}
-                    {/*
-            <ContentNode key={content.sys.id + "question"} {...content.question.json.content}/>
-*/}
-                </div>
-            ))}
-        </>
-    );
-};
+const NextJsPage = (props) => <NextJsQuestions data={props.data} />;
 
 export default NextJsPage;
 

@@ -5,7 +5,7 @@ const ProfilePage = () => {
     return <UserProfile />;
 };
 
-export const getServerSideProps = async (context) => {
+/*export const getServerSideProps = async (context) => {
     const session = await getSession({ req: context.req });
 
     if (!session) {
@@ -20,6 +20,6 @@ export const getServerSideProps = async (context) => {
     return {
         props: { session },
     };
-};
+};*/
 
 export default ProfilePage;

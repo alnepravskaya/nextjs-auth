@@ -29,6 +29,11 @@ const MainNavigation = () => {
                         </li>
                     )}
                     {isAuthed && (
+                        <li>
+                            <Link href="/questions/nextjs">NextJs</Link>
+                        </li>
+                    )}
+                    {isAuthed && (
                         <li onClick={logoutHandler}>
                             <button>Logout</button>
                         </li>

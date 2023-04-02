@@ -10,7 +10,6 @@ const AuthPage = () => {
     useEffect(() => {
         getSession().then((session) => {
             if (session) {
-                debugger;
                 // replace('/');
             } else {
                 setIsLoading(false);

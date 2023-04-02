@@ -1,6 +1,23 @@
+import {
+    CODE,
+    DOCUMENT,
+    HEADING_1,
+    HEADING_2,
+    HEADING_3,
+    HEADING_4,
+    HEADING_5,
+    HEADING_6,
+    HYPERLINK,
+    LIST_ITEM,
+    ORDERED_LIST,
+    PARAGRAPH,
+    TEXT,
+    UNORDERED_LIST,
+} from './constants';
+
 const ContentNode = (props) => {
     switch (props.nodeType) {
-        case 'document':
+        case DOCUMENT:
             return (
                 <div>
                     {props.content.map((item, index) => (
@@ -8,62 +25,68 @@ const ContentNode = (props) => {
                     ))}
                 </div>
             );
-        case 'heading-2':
+        case HEADING_1:
+            return (
+                <h1>
+                    <ContentNode {...props.content[0]} />
+                </h1>
+            );
+        case HEADING_2:
             return (
                 <h2>
                     <ContentNode {...props.content[0]} />
                 </h2>
             );
-        case 'heading-3':
+        case HEADING_3:
             return (
                 <h3>
                     <ContentNode {...props.content[0]} />
                 </h3>
             );
-        case 'heading-4':
+        case HEADING_4:
             return (
                 <h4>
                     <ContentNode {...props.content[0]} />
                 </h4>
             );
-        case 'heading-5':
+        case HEADING_5:
             return (
                 <h4>
                     <ContentNode {...props.content[0]} />
                 </h4>
             );
-        case 'heading-6':
+        case HEADING_6:
             return (
                 <h4>
                     <ContentNode {...props.content[0]} />
                 </h4>
             );
-        case 'unordered-list':
+        case UNORDERED_LIST:
             return (
-                <ul className="content-node-list">
+                <ul>
                     {props.content.map((item, index) => (
                         <ContentNode key={index.toString()} {...item} />
                     ))}
                 </ul>
             );
-        case 'ordered-list':
+        case ORDERED_LIST:
             return (
-                <ol className="content-node-list">
+                <ol>
                     {props.content.map((item, index) => (
                         <ContentNode key={index.toString()} {...item} />
                     ))}
                 </ol>
             );
-        case 'list-item': {
+        case LIST_ITEM: {
             return (
-                <li className="content-node-list-item">
+                <li>
                     {props.content.map((item, index) => (
                         <ContentNode key={index.toString()} {...item} />
                     ))}
                 </li>
             );
         }
-        case 'paragraph': {
+        case PARAGRAPH: {
             const childItems = props.content.filter(
                 (item) => item.nodeType !== 'text' || !!item.value
             );
@@ -80,7 +103,7 @@ const ContentNode = (props) => {
                 </>
             );
         }
-        case 'text': {
+        case TEXT: {
             const fixedValue =
                 (!props.value.indexOf('[]')
                     ? props.value.slice(2)
@@ -100,7 +123,7 @@ const ContentNode = (props) => {
 
             return value;
         }
-        case 'hyperlink': {
+        case HYPERLINK: {
             return (
                 <a target="_blank" href={props.data.uri}>
                     {props.content.map((item, idx) => (
@@ -109,6 +132,14 @@ const ContentNode = (props) => {
                 </a>
             );
         }
+        case CODE:
+            return (
+                <pre>
+                    <code>
+                        <ContentNode {...props.content[0]} />
+                    </code>
+                </pre>
+            );
 
         default:
             return null;

@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint . --fix"
+    "lint": "eslint . --fix",
+    "prepare": "husky install"
   },
   "dependencies": {
     "@apollo/client": "^3.7.10",

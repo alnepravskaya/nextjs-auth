@@ -15,7 +15,7 @@ import {
     UNORDERED_LIST,
 } from './constants';
 
-const ContentNode = (props) => {
+const ContentNode = (props)=>{
     switch (props.nodeType) {
         case DOCUMENT:
             return (

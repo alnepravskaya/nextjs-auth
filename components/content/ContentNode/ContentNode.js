@@ -1,4 +1,5 @@
 import {
+    BOLD,
     CODE,
     DOCUMENT,
     HEADING_1,
@@ -8,14 +9,17 @@ import {
     HEADING_5,
     HEADING_6,
     HYPERLINK,
+    ITALIC,
     LIST_ITEM,
     ORDERED_LIST,
     PARAGRAPH,
     TEXT,
+    UNDELINE,
+    UNDERLINE,
     UNORDERED_LIST,
 } from './constants';
 
-const ContentNode = (props)=>{
+const ContentNode = (props) => {
     switch (props.nodeType) {
         case DOCUMENT:
             return (
@@ -104,21 +108,23 @@ const ContentNode = (props)=>{
             );
         }
         case TEXT: {
-            const fixedValue =
-                (!props.value.indexOf('[]')
-                    ? props.value.slice(2)
-                    : props.value) ?? '';
+            let value = props.value;
 
-            let value = <>{fixedValue.replace(/\s+/g, ' ')}</>;
-
-            if (props.marks.some((m) => m.type === 'bold')) {
+            if (props.marks.some((m) => m.type === BOLD)) {
                 value = <b>{value}</b>;
             }
-            if (props.marks.some((m) => m.type === 'italic')) {
+            if (props.marks.some((m) => m.type === ITALIC)) {
                 value = <i>{value}</i>;
             }
-            if (props.marks.some((m) => m.type === 'underline')) {
+            if (props.marks.some((m) => m.type === UNDERLINE)) {
                 value = <u>{value}</u>;
+            }
+            if (props.marks.some((m) => m.type === CODE)) {
+                value = (
+                    <pre>
+                        <code>{value}</code>
+                    </pre>
+                );
             }
 
             return value;
@@ -132,14 +138,6 @@ const ContentNode = (props)=>{
                 </a>
             );
         }
-        case CODE:
-            return (
-                <pre>
-                    <code>
-                        <ContentNode {...props.content[0]} />
-                    </code>
-                </pre>
-            );
 
         default:
             return null;

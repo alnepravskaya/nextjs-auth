@@ -21,3 +21,11 @@ h6 {
 .wrapper {
   padding: 0 10%;
 }
+
+.bold {
+  font-weight: 600;
+}
+
+.save-space {
+  white-space: pre-line
+}

@@ -12,3 +12,6 @@ export const PARAGRAPH = 'paragraph';
 export const TEXT = 'text';
 export const HYPERLINK = 'hyperlink';
 export const CODE = 'code';
+export const UNDERLINE = 'underline';
+export const ITALIC = 'italic';
+export const BOLD = 'bold';

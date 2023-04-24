@@ -8,19 +8,18 @@ import {
     HEADING_4,
     HEADING_5,
     HEADING_6,
-    HYPERLINK,
-    ITALIC,
+    HYPERLINK, ITALIC,
     LIST_ITEM,
     ORDERED_LIST,
     PARAGRAPH,
-    TEXT,
-    UNDELINE,
-    UNDERLINE,
+    TEXT, UNDELINE, UNDERLINE,
     UNORDERED_LIST,
 } from './constants';
 
 const ContentNode = (props) => {
+
     switch (props.nodeType) {
+
         case DOCUMENT:
             return (
                 <div>
@@ -108,7 +107,7 @@ const ContentNode = (props) => {
             );
         }
         case TEXT: {
-            let value = props.value;
+            let value = props.value
 
             if (props.marks.some((m) => m.type === BOLD)) {
                 value = <b>{value}</b>;
@@ -120,11 +119,7 @@ const ContentNode = (props) => {
                 value = <u>{value}</u>;
             }
             if (props.marks.some((m) => m.type === CODE)) {
-                value = (
-                    <pre>
-                        <code>{value}</code>
-                    </pre>
-                );
+                value = <pre><code>{value}</code></pre>;
             }
 
             return value;
